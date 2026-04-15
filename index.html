@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AgriConnect — Platform Agen Pertanian</title>
+  <meta name="description" content="AgriConnect: Platform digital untuk agen pertanian Indonesia. Pantau komoditas, kelola keuangan, dan lacak siklus tanam." />
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@0.344.0"></script>
+  
+  <!-- Supabase JS SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div id="app" class="app-container">
+    
+    <!-- ============================================ -->
+    <!-- SCREEN 1: LOGIN                              -->
+    <!-- ============================================ -->
+    <section id="screen-login" class="screen active">
+      <div class="login-bg">
+        <div class="login-pattern"></div>
+        <div class="login-gradient"></div>
+      </div>
+      <div class="login-content">
+        <div class="login-logo-area">
+          <div class="login-logo">
+            <i data-lucide="sprout" class="logo-icon"></i>
+          </div>
+          <h1 class="login-title">AgriConnect</h1>
+          <p class="login-subtitle">Platform Agen Pertanian Digital</p>
+        </div>
+        
+        <div class="login-card">
+          <h2 class="login-card-title" id="login-card-title">Masuk ke Akun Anda</h2>
+          <form id="login-form" class="login-form">
+            <!-- Name field (only visible in register mode) -->
+            <div class="form-group" id="name-group" style="display:none">
+              <label for="login-name">Nama Lengkap</label>
+              <div class="input-wrapper">
+                <i data-lucide="user" class="input-icon"></i>
+                <input type="text" id="login-name" placeholder="Nama lengkap Anda" />
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="login-email">Email</label>
+              <div class="input-wrapper">
+                <i data-lucide="mail" class="input-icon"></i>
+                <input type="email" id="login-email" placeholder="contoh@email.com" />
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="login-password">Kata Sandi</label>
+              <div class="input-wrapper">
+                <i data-lucide="lock" class="input-icon"></i>
+                <input type="password" id="login-password" placeholder="Minimal 6 karakter" />
+                <button type="button" class="toggle-password" id="btn-toggle-pw">
+                  <i data-lucide="eye" class="pw-icon"></i>
+                </button>
+              </div>
+            </div>
+            <div class="form-options" id="form-options">
+              <label class="checkbox-label">
+                <input type="checkbox" checked /> Ingat saya
+              </label>
+              <a href="#" class="forgot-link">Lupa sandi?</a>
+            </div>
+            <button type="submit" class="btn-login" id="btn-login">
+              <span>Masuk</span>
+              <i data-lucide="arrow-right"></i>
+            </button>
+          </form>
+          <div class="login-divider">
+            <span>atau masuk dengan</span>
+          </div>
+          <div class="social-login">
+            <button class="btn-social" id="btn-google">
+              <svg width="20" height="20" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+              <span>Google</span>
+            </button>
+            <button class="btn-social" id="btn-whatsapp">
+              <i data-lucide="smartphone" style="color: #25D366;"></i>
+              <span>WhatsApp</span>
+            </button>
+          </div>
+        </div>
+        
+        <p class="login-footer" id="login-footer">Belum punya akun? <a href="#" id="toggle-auth-mode">Daftar Sekarang</a></p>
+      </div>
+    </section>
+
+    <!-- ============================================ -->
+    <!-- SCREEN 2: AGENT DASHBOARD                    -->
+    <!-- ============================================ -->
+    <section id="screen-dashboard" class="screen">
+      <header class="top-bar">
+        <div class="top-bar-left">
+          <div class="avatar-sm" id="dashboard-avatar">
+            <span>SA</span>
+          </div>
+          <div class="greeting">
+            <span class="greeting-label">Selamat Sore 👋</span>
+            <h2 class="greeting-name">Agen Sari</h2>
+          </div>
+        </div>
+        <div class="top-bar-right">
+          <button class="icon-btn notification-btn" id="btn-notifications" aria-label="Notifikasi">
+            <i data-lucide="bell"></i>
+            <span class="notif-badge">3</span>
+          </button>
+        </div>
+      </header>
+
+      <div class="screen-body">
+        <!-- Summary Cards -->
+        <div class="summary-cards">
+          <div class="summary-card card-revenue">
+            <div class="summary-icon"><i data-lucide="wallet"></i></div>
+            <div class="summary-info">
+              <span class="summary-label">Total Pendapatan</span>
+              <span class="summary-value">Rp 12.450.000</span>
+              <span class="summary-change positive">+18% bulan ini</span>
+            </div>
+          </div>
+          <div class="summary-card card-commodity">
+            <div class="summary-icon"><i data-lucide="package"></i></div>
+            <div class="summary-info">
+              <span class="summary-label">Komoditas Aktif</span>
+              <span class="summary-value">24</span>
+              <span class="summary-change positive">+3 baru</span>
+            </div>
+          </div>
+          <div class="summary-card card-farmer">
+            <div class="summary-icon"><i data-lucide="users"></i></div>
+            <div class="summary-info">
+              <span class="summary-label">Petani Binaan</span>
+              <span class="summary-value">156</span>
+              <span class="summary-change positive">+12 bergabung</span>
+            </div>
+          </div>
+          <div class="summary-card card-transaction">
+            <div class="summary-icon"><i data-lucide="repeat"></i></div>
+            <div class="summary-info">
+              <span class="summary-label">Transaksi Bulan Ini</span>
+              <span class="summary-value">89</span>
+              <span class="summary-change neutral">Stabil</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="section-block">
+          <h3 class="section-title">Aksi Cepat</h3>
+          <div class="quick-actions">
+            <button class="quick-action" data-screen="commodity">
+              <div class="qa-icon qa-green"><i data-lucide="leaf"></i></div>
+              <span>Komoditas</span>
+            </button>
+            <button class="quick-action" data-screen="finance">
+              <div class="qa-icon qa-blue"><i data-lucide="banknote"></i></div>
+              <span>Keuangan</span>
+            </button>
+            <button class="quick-action" data-screen="planting">
+              <div class="qa-icon qa-amber"><i data-lucide="calendar-days"></i></div>
+              <span>Tanam</span>
+            </button>
+            <button class="quick-action" data-screen="report">
+              <div class="qa-icon qa-purple"><i data-lucide="bar-chart-3"></i></div>
+              <span>Laporan</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Price Trend -->
+        <div class="section-block">
+          <div class="section-header">
+            <h3 class="section-title">Tren Harga Komoditas</h3>
+            <button class="see-all" data-screen="commodity">Lihat Semua</button>
+          </div>
+          <div class="price-chart-card">
+            <div class="chart-header">
+              <div>
+                <span class="chart-commodity">Cabai Merah Besar</span>
+                <span class="chart-price">Rp 45.000<small>/kg</small></span>
+              </div>
+              <span class="chart-change positive">▲ 12.5%</span>
+            </div>
+            <div class="mini-chart" id="mini-chart-dashboard">
+              <svg viewBox="0 0 300 80" preserveAspectRatio="none">
+                <defs>
+                  <linearGradient id="chartGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="var(--primary)" stop-opacity="0.3"/>
+                    <stop offset="100%" stop-color="var(--primary)" stop-opacity="0"/>
+                  </linearGradient>
+                </defs>
+                <path class="chart-area" d="M0,60 C30,55 50,40 80,35 C110,30 130,50 160,25 C190,10 210,30 240,20 C260,15 280,10 300,5 L300,80 L0,80 Z" fill="url(#chartGrad)"/>
+                <path class="chart-line" d="M0,60 C30,55 50,40 80,35 C110,30 130,50 160,25 C190,10 210,30 240,20 C260,15 280,10 300,5" fill="none" stroke="var(--primary)" stroke-width="2.5"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Activities -->
+        <div class="section-block">
+          <div class="section-header">
+            <h3 class="section-title">Aktivitas Terbaru</h3>
+            <button class="see-all" data-screen="report">Selengkapnya</button>
+          </div>
+          <div class="activity-list">
+            <div class="activity-item">
+              <div class="activity-icon act-green"><i data-lucide="arrow-down-left"></i></div>
+              <div class="activity-info">
+                <span class="activity-title">Pembelian Cabai Merah</span>
+                <span class="activity-meta">Petani Budi · 50 kg</span>
+              </div>
+              <span class="activity-amount negative">-Rp 2.250.000</span>
+            </div>
+            <div class="activity-item">
+              <div class="activity-icon act-blue"><i data-lucide="arrow-up-right"></i></div>
+              <div class="activity-info">
+                <span class="activity-title">Penjualan ke Pasar Induk</span>
+                <span class="activity-meta">PT. Segar Makmur</span>
+              </div>
+              <span class="activity-amount positive">+Rp 3.800.000</span>
+            </div>
+            <div class="activity-item">
+              <div class="activity-icon act-amber"><i data-lucide="sprout"></i></div>
+              <div class="activity-info">
+                <span class="activity-title">Update Siklus Tanam</span>
+                <span class="activity-meta">Sawah Blok A · Fase Vegetatif</span>
+              </div>
+              <span class="activity-tag">Padi</span>
+            </div>
+            <div class="activity-item">
+              <div class="activity-icon act-purple"><i data-lucide="file-text"></i></div>
+              <div class="activity-info">
+                <span class="activity-title">Laporan Mingguan Dikirim</span>
+                <span class="activity-meta">Periode 5-11 April 2026</span>
+              </div>
+              <span class="activity-tag tag-success">Selesai</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================ -->
+    <!-- SCREEN 3: COMMODITY DETAILS                  -->
+    <!-- ============================================ -->
+    <section id="screen-commodity" class="screen">
+      <header class="detail-header commodity-header-bg">
+        <div class="detail-nav">
+          <button class="back-btn" data-screen="dashboard"><i data-lucide="arrow-left"></i></button>
+          <h2 class="detail-title">Detail Komoditas</h2>
+          <button class="icon-btn" aria-label="Simpan Komoditas"><i data-lucide="bookmark"></i></button>
+        </div>
+        <div class="commodity-hero">
+          <div class="commodity-badge">🌶️</div>
+          <h1 class="commodity-name">Cabai Merah Besar</h1>
+          <p class="commodity-latin">Capsicum annuum L.</p>
+        </div>
+      </header>
+
+      <div class="screen-body detail-body">
+        <!-- Price Card -->
+        <div class="price-display-card">
+          <div class="price-main">
+            <span class="price-label">Harga Pasar Hari Ini</span>
+            <div class="price-row">
+              <span class="price-big">Rp 45.000</span>
+              <span class="price-unit">/kg</span>
+            </div>
+            <div class="price-change-badge positive">
+              <i data-lucide="trending-up"></i>
+              <span>+12.5% dari kemarin</span>
+            </div>
+          </div>
+          <div class="price-range">
+            <div class="range-item">
+              <span class="range-label">Terendah</span>
+              <span class="range-value low">Rp 38.000</span>
+            </div>
+            <div class="range-divider"></div>
+            <div class="range-item">
+              <span class="range-label">Tertinggi</span>
+              <span class="range-value high">Rp 52.000</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Chart -->
+        <div class="section-block">
+          <div class="section-header">
+            <h3 class="section-title">Grafik Harga</h3>
+            <div class="chart-tabs">
+              <button class="chart-tab active">1M</button>
+              <button class="chart-tab">3M</button>
+              <button class="chart-tab">6M</button>
+              <button class="chart-tab">1T</button>
+            </div>
+          </div>
+          <div class="chart-container">
+            <svg viewBox="0 0 340 140" preserveAspectRatio="none" class="full-chart">
+              <defs>
+                <linearGradient id="commodityGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#10b981" stop-opacity="0.25"/>
+                  <stop offset="100%" stop-color="#10b981" stop-opacity="0"/>
+                </linearGradient>
+              </defs>
+              <!-- Grid lines -->
+              <line x1="0" y1="35" x2="340" y2="35" stroke="#e5e7eb" stroke-width="0.5" stroke-dasharray="4"/>
+              <line x1="0" y1="70" x2="340" y2="70" stroke="#e5e7eb" stroke-width="0.5" stroke-dasharray="4"/>
+              <line x1="0" y1="105" x2="340" y2="105" stroke="#e5e7eb" stroke-width="0.5" stroke-dasharray="4"/>
+              <!-- Area -->
+              <path d="M0,110 C20,105 40,95 60,90 C80,85 100,75 120,80 C140,85 160,60 180,50 C200,40 220,55 240,45 C260,35 280,30 300,25 C320,20 335,15 340,12 L340,140 L0,140 Z" fill="url(#commodityGrad)"/>
+              <!-- Line -->
+              <path d="M0,110 C20,105 40,95 60,90 C80,85 100,75 120,80 C140,85 160,60 180,50 C200,40 220,55 240,45 C260,35 280,30 300,25 C320,20 335,15 340,12" fill="none" stroke="#10b981" stroke-width="2.5" stroke-linecap="round"/>
+              <!-- Current price dot -->
+              <circle cx="340" cy="12" r="5" fill="#10b981" stroke="#fff" stroke-width="2"/>
+            </svg>
+            <div class="chart-labels">
+              <span>Mar 11</span><span>Mar 18</span><span>Mar 25</span><span>Apr 1</span><span>Apr 8</span><span>Hari ini</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Supply Info -->
+        <div class="section-block">
+          <h3 class="section-title">Informasi Pasokan</h3>
+          <div class="info-grid">
+            <div class="info-card">
+              <i data-lucide="map-pin" class="info-card-icon"></i>
+              <span class="info-card-label">Daerah Asal</span>
+              <span class="info-card-value">Brebes, Jawa Tengah</span>
+            </div>
+            <div class="info-card">
+              <i data-lucide="truck" class="info-card-icon"></i>
+              <span class="info-card-label">Stok Tersedia</span>
+              <span class="info-card-value">2.450 kg</span>
+            </div>
+            <div class="info-card">
+              <i data-lucide="star" class="info-card-icon"></i>
+              <span class="info-card-label">Grade</span>
+              <span class="info-card-value">A (Premium)</span>
+            </div>
+            <div class="info-card">
+              <i data-lucide="calendar" class="info-card-icon"></i>
+              <span class="info-card-label">Musim Panen</span>
+              <span class="info-card-value">Mar - Mei 2026</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Supplier List -->
+        <div class="section-block">
+          <h3 class="section-title">Petani Pemasok</h3>
+          <div class="supplier-list">
+            <div class="supplier-item">
+              <div class="supplier-avatar"><span>BP</span></div>
+              <div class="supplier-info">
+                <span class="supplier-name">Budi Prasetyo</span>
+                <span class="supplier-location">Brebes · 500 kg tersedia</span>
+              </div>
+              <span class="supplier-price">Rp 42.000/kg</span>
+            </div>
+            <div class="supplier-item">
+              <div class="supplier-avatar s2"><span>AW</span></div>
+              <div class="supplier-info">
+                <span class="supplier-name">Agus Widodo</span>
+                <span class="supplier-location">Tegal · 300 kg tersedia</span>
+              </div>
+              <span class="supplier-price">Rp 43.500/kg</span>
+            </div>
+            <div class="supplier-item">
+              <div class="supplier-avatar s3"><span>SR</span></div>
+              <div class="supplier-info">
+                <span class="supplier-name">Siti Rahayu</span>
+                <span class="supplier-location">Cirebon · 800 kg tersedia</span>
+              </div>
+              <span class="supplier-price">Rp 41.000/kg</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================ -->
+    <!-- SCREEN 4: DIGITAL FINANCE                    -->
+    <!-- ============================================ -->
+    <section id="screen-finance" class="screen">
+      <header class="detail-header finance-header-bg">
+        <div class="detail-nav">
+          <button class="back-btn" data-screen="dashboard"><i data-lucide="arrow-left"></i></button>
+          <h2 class="detail-title">Keuangan Digital</h2>
+          <button class="icon-btn" aria-label="Pengaturan"><i data-lucide="settings"></i></button>
+        </div>
+        <div class="wallet-hero">
+          <span class="wallet-label">Saldo Dompet Digital</span>
+          <h1 class="wallet-balance" id="wallet-balance">Rp 8.750.000</h1>
+          <div class="wallet-actions">
+            <button class="wallet-action-btn">
+              <div class="wa-icon"><i data-lucide="plus"></i></div>
+              <span>Top Up</span>
+            </button>
+            <button class="wallet-action-btn">
+              <div class="wa-icon"><i data-lucide="send"></i></div>
+              <span>Transfer</span>
+            </button>
+            <button class="wallet-action-btn">
+              <div class="wa-icon"><i data-lucide="qr-code"></i></div>
+              <span>QR Pay</span>
+            </button>
+            <button class="wallet-action-btn">
+              <div class="wa-icon"><i data-lucide="history"></i></div>
+              <span>Riwayat</span>
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <div class="screen-body detail-body">
+        <!-- Financial Summary -->
+        <div class="section-block">
+          <h3 class="section-title">Ringkasan Bulan Ini</h3>
+          <div class="finance-summary">
+            <div class="fin-summary-card income">
+              <i data-lucide="trending-up"></i>
+              <div>
+                <span class="fin-label">Pemasukan</span>
+                <span class="fin-value">Rp 15.200.000</span>
+              </div>
+            </div>
+            <div class="fin-summary-card expense">
+              <i data-lucide="trending-down"></i>
+              <div>
+                <span class="fin-label">Pengeluaran</span>
+                <span class="fin-value">Rp 6.450.000</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Expense Breakdown -->
+        <div class="section-block">
+          <h3 class="section-title">Distribusi Pengeluaran</h3>
+          <div class="expense-chart-card">
+            <div class="donut-chart">
+              <svg viewBox="0 0 120 120">
+                <circle cx="60" cy="60" r="50" fill="none" stroke="#e5e7eb" stroke-width="12"/>
+                <circle cx="60" cy="60" r="50" fill="none" stroke="#10b981" stroke-width="12" 
+                  stroke-dasharray="141.3 172" stroke-dashoffset="-25" stroke-linecap="round"/>
+                <circle cx="60" cy="60" r="50" fill="none" stroke="#3b82f6" stroke-width="12" 
+                  stroke-dasharray="78.5 234.8" stroke-dashoffset="-166.3" stroke-linecap="round"/>
+                <circle cx="60" cy="60" r="50" fill="none" stroke="#f59e0b" stroke-width="12" 
+                  stroke-dasharray="47.1 266.2" stroke-dashoffset="-244.8" stroke-linecap="round"/>
+                <circle cx="60" cy="60" r="50" fill="none" stroke="#8b5cf6" stroke-width="12" 
+                  stroke-dasharray="31.4 281.9" stroke-dashoffset="-291.9" stroke-linecap="round"/>
+              </svg>
+              <div class="donut-center">
+                <span class="donut-total">Rp 6.45jt</span>
+              </div>
+            </div>
+            <div class="expense-legend">
+              <div class="legend-item"><span class="legend-dot" style="background:#10b981"></span>Pembelian Komoditas <b>45%</b></div>
+              <div class="legend-item"><span class="legend-dot" style="background:#3b82f6"></span>Transportasi <b>25%</b></div>
+              <div class="legend-item"><span class="legend-dot" style="background:#f59e0b"></span>Bibit & Pupuk <b>15%</b></div>
+              <div class="legend-item"><span class="legend-dot" style="background:#8b5cf6"></span>Operasional <b>10%</b></div>
+              <div class="legend-item"><span class="legend-dot" style="background:#e5e7eb"></span>Lainnya <b>5%</b></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Transaction List -->
+        <div class="section-block">
+          <div class="section-header">
+            <h3 class="section-title">Transaksi Terakhir</h3>
+            <button class="see-all">Semua</button>
+          </div>
+          <div class="transaction-list">
+            <div class="transaction-date">Hari Ini</div>
+            <div class="transaction-item">
+              <div class="tx-icon tx-in"><i data-lucide="arrow-down-left"></i></div>
+              <div class="tx-info">
+                <span class="tx-name">Penjualan Cabai Merah</span>
+                <span class="tx-time">14:30 · PT Segar Makmur</span>
+              </div>
+              <span class="tx-amount positive">+Rp 3.800.000</span>
+            </div>
+            <div class="transaction-item">
+              <div class="tx-icon tx-out"><i data-lucide="arrow-up-right"></i></div>
+              <div class="tx-info">
+                <span class="tx-name">Beli Pupuk NPK</span>
+                <span class="tx-time">10:15 · Toko Tani Makmur</span>
+              </div>
+              <span class="tx-amount negative">-Rp 450.000</span>
+            </div>
+            <div class="transaction-date">Kemarin</div>
+            <div class="transaction-item">
+              <div class="tx-icon tx-in"><i data-lucide="arrow-down-left"></i></div>
+              <div class="tx-info">
+                <span class="tx-name">Penjualan Bawang Merah</span>
+                <span class="tx-time">16:20 · Pasar Induk Kramat Jati</span>
+              </div>
+              <span class="tx-amount positive">+Rp 2.100.000</span>
+            </div>
+            <div class="transaction-item">
+              <div class="tx-icon tx-out"><i data-lucide="arrow-up-right"></i></div>
+              <div class="tx-info">
+                <span class="tx-name">Transport Logistik</span>
+                <span class="tx-time">08:00 · Ekspedisi Nusantara</span>
+              </div>
+              <span class="tx-amount negative">-Rp 750.000</span>
+            </div>
+            <div class="transaction-item">
+              <div class="tx-icon tx-transfer"><i data-lucide="repeat"></i></div>
+              <div class="tx-info">
+                <span class="tx-name">Transfer ke Petani Budi</span>
+                <span class="tx-time">07:30 · Pembayaran Cabai</span>
+              </div>
+              <span class="tx-amount negative">-Rp 2.250.000</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================ -->
+    <!-- SCREEN 5: SIKLUS TANAM PADI                  -->
+    <!-- ============================================ -->
+    <section id="screen-planting" class="screen">
+      <header class="detail-header planting-header-bg">
+        <div class="detail-nav">
+          <button class="back-btn" data-screen="dashboard"><i data-lucide="arrow-left"></i></button>
+          <h2 class="detail-title">Siklus Tanam</h2>
+          <button class="icon-btn" aria-label="Tambah Siklus"><i data-lucide="plus-circle"></i></button>
+        </div>
+        <div class="planting-hero">
+          <div class="planting-badge">🌾</div>
+          <h1 class="planting-name">Padi (Oryza sativa)</h1>
+          <p class="planting-location">Sawah Blok A · Subang, Jawa Barat</p>
+        </div>
+      </header>
+
+      <div class="screen-body detail-body">
+        <!-- Progress -->
+        <div class="cycle-progress-card">
+          <div class="cycle-header-row">
+            <div>
+              <span class="cycle-status-label">Status Saat Ini</span>
+              <span class="cycle-status-value">Fase Vegetatif</span>
+            </div>
+            <div class="cycle-percentage">
+              <svg viewBox="0 0 80 80">
+                <circle cx="40" cy="40" r="34" fill="none" stroke="#e5e7eb" stroke-width="6"/>
+                <circle cx="40" cy="40" r="34" fill="none" stroke="#f59e0b" stroke-width="6" 
+                  stroke-dasharray="128 213.6" stroke-dashoffset="-53.4" stroke-linecap="round"
+                  transform="rotate(-90 40 40)"/>
+              </svg>
+              <span class="cycle-pct">60%</span>
+            </div>
+          </div>
+          <div class="cycle-dates">
+            <div><i data-lucide="calendar"></i> <span>Mulai: 15 Feb 2026</span></div>
+            <div><i data-lucide="flag"></i> <span>Estimasi Panen: 20 Jun 2026</span></div>
+          </div>
+        </div>
+
+        <!-- Timeline -->
+        <div class="section-block">
+          <h3 class="section-title">Timeline Siklus Tanam</h3>
+          <div class="timeline">
+            <div class="timeline-item completed">
+              <div class="tl-dot"></div>
+              <div class="tl-content">
+                <div class="tl-header">
+                  <span class="tl-title">Persiapan Lahan</span>
+                  <span class="tl-date">15 Feb</span>
+                </div>
+                <p class="tl-desc">Pengolahan tanah, pembajakan, dan perataan sawah selesai.</p>
+                <span class="tl-badge completed">Selesai ✓</span>
+              </div>
+            </div>
+            <div class="timeline-item completed">
+              <div class="tl-dot"></div>
+              <div class="tl-content">
+                <div class="tl-header">
+                  <span class="tl-title">Persemaian</span>
+                  <span class="tl-date">22 Feb</span>
+                </div>
+                <p class="tl-desc">Benih varietas Ciherang disemai. Daya tumbuh 95%.</p>
+                <span class="tl-badge completed">Selesai ✓</span>
+              </div>
+            </div>
+            <div class="timeline-item completed">
+              <div class="tl-dot"></div>
+              <div class="tl-content">
+                <div class="tl-header">
+                  <span class="tl-title">Penanaman</span>
+                  <span class="tl-date">8 Mar</span>
+                </div>
+                <p class="tl-desc">Tanam pindah dilakukan pada umur bibit 21 hari. Jarak tanam 25x25 cm.</p>
+                <span class="tl-badge completed">Selesai ✓</span>
+              </div>
+            </div>
+            <div class="timeline-item active">
+              <div class="tl-dot"></div>
+              <div class="tl-content">
+                <div class="tl-header">
+                  <span class="tl-title">Fase Vegetatif</span>
+                  <span class="tl-date">22 Mar - Sekarang</span>
+                </div>
+                <p class="tl-desc">Pertumbuhan batang dan daun. Pemupukan susulan ke-2 pada 5 April. Tinggi tanaman rata-rata 45 cm.</p>
+                <span class="tl-badge active">Sedang Berjalan 🌱</span>
+                <div class="tl-checklist">
+                  <label><input type="checkbox" checked disabled /> Pemupukan ke-1 (Urea)</label>
+                  <label><input type="checkbox" checked disabled /> Pemupukan ke-2 (NPK)</label>
+                  <label><input type="checkbox" disabled /> Penyiangan gulma</label>
+                  <label><input type="checkbox" disabled /> Pengendalian hama</label>
+                </div>
+              </div>
+            </div>
+            <div class="timeline-item upcoming">
+              <div class="tl-dot"></div>
+              <div class="tl-content">
+                <div class="tl-header">
+                  <span class="tl-title">Fase Generatif</span>
+                  <span class="tl-date">Est. 25 Apr</span>
+                </div>
+                <p class="tl-desc">Pembungaan dan pengisian bulir padi.</p>
+                <span class="tl-badge upcoming">Belum Dimulai</span>
+              </div>
+            </div>
+            <div class="timeline-item upcoming">
+              <div class="tl-dot"></div>
+              <div class="tl-content">
+                <div class="tl-header">
+                  <span class="tl-title">Panen</span>
+                  <span class="tl-date">Est. 20 Jun</span>
+                </div>
+                <p class="tl-desc">Target produksi: 6 ton/hektar.</p>
+                <span class="tl-badge upcoming">Belum Dimulai</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Weather -->
+        <div class="section-block">
+          <h3 class="section-title">Cuaca Lokasi Sawah</h3>
+          <div class="weather-card">
+            <div class="weather-main">
+              <span class="weather-icon">⛅</span>
+              <div>
+                <span class="weather-temp">29°C</span>
+                <span class="weather-desc">Berawan Sebagian</span>
+              </div>
+            </div>
+            <div class="weather-details">
+              <div><i data-lucide="droplets"></i> <span>Kelembapan: 78%</span></div>
+              <div><i data-lucide="wind"></i> <span>Angin: 12 km/j</span></div>
+              <div><i data-lucide="cloud-rain"></i> <span>Hujan: 30%</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================ -->
+    <!-- SCREEN 6: AGENT PROFILE                      -->
+    <!-- ============================================ -->
+    <section id="screen-profile" class="screen">
+      <header class="detail-header profile-header-bg">
+        <div class="detail-nav">
+          <button class="back-btn" data-screen="dashboard"><i data-lucide="arrow-left"></i></button>
+          <h2 class="detail-title">Profil Agen</h2>
+          <button class="icon-btn" aria-label="Edit Profil"><i data-lucide="edit-3"></i></button>
+        </div>
+        <div class="profile-hero">
+          <div class="profile-avatar">
+            <span>SA</span>
+            <div class="profile-verified"><i data-lucide="check-circle"></i></div>
+          </div>
+          <h1 class="profile-name">Agen Sari Wulandari</h1>
+          <p class="profile-role">Agen Lapangan Senior · Jawa Barat</p>
+          <div class="profile-badges">
+            <span class="pbadge gold">⭐ Top Agent</span>
+            <span class="pbadge green">✓ Terverifikasi</span>
+          </div>
+        </div>
+      </header>
+
+      <div class="screen-body detail-body">
+        <!-- Stats -->
+        <div class="profile-stats">
+          <div class="pstat">
+            <span class="pstat-value">3.5</span>
+            <span class="pstat-label">Tahun</span>
+          </div>
+          <div class="pstat-divider"></div>
+          <div class="pstat">
+            <span class="pstat-value">156</span>
+            <span class="pstat-label">Petani</span>
+          </div>
+          <div class="pstat-divider"></div>
+          <div class="pstat">
+            <span class="pstat-value">4.8</span>
+            <span class="pstat-label">Rating</span>
+          </div>
+          <div class="pstat-divider"></div>
+          <div class="pstat">
+            <span class="pstat-value">89</span>
+            <span class="pstat-label">Transaksi</span>
+          </div>
+        </div>
+
+        <!-- Personal Info -->
+        <div class="section-block">
+          <h3 class="section-title">Informasi Pribadi</h3>
+          <div class="profile-info-list">
+            <div class="pinfo-item">
+              <i data-lucide="user"></i>
+              <div>
+                <span class="pinfo-label">Nama Lengkap</span>
+                <span class="pinfo-value">Sari Wulandari</span>
+              </div>
+            </div>
+            <div class="pinfo-item">
+              <i data-lucide="phone"></i>
+              <div>
+                <span class="pinfo-label">No. Telepon</span>
+                <span class="pinfo-value">+62 812-3456-7890</span>
+              </div>
+            </div>
+            <div class="pinfo-item">
+              <i data-lucide="mail"></i>
+              <div>
+                <span class="pinfo-label">Email</span>
+                <span class="pinfo-value">agen.sari@agriconnect.id</span>
+              </div>
+            </div>
+            <div class="pinfo-item">
+              <i data-lucide="map-pin"></i>
+              <div>
+                <span class="pinfo-label">Wilayah Kerja</span>
+                <span class="pinfo-value">Subang, Karawang, Purwakarta</span>
+              </div>
+            </div>
+            <div class="pinfo-item">
+              <i data-lucide="calendar"></i>
+              <div>
+                <span class="pinfo-label">Bergabung Sejak</span>
+                <span class="pinfo-value">Oktober 2022</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Achievements -->
+        <div class="section-block">
+          <h3 class="section-title">Pencapaian</h3>
+          <div class="achievements-grid">
+            <div class="achievement-card">
+              <span class="ach-icon">🏆</span>
+              <span class="ach-title">Top Seller</span>
+              <span class="ach-desc">Q1 2026</span>
+            </div>
+            <div class="achievement-card">
+              <span class="ach-icon">🌾</span>
+              <span class="ach-title">100 Petani</span>
+              <span class="ach-desc">Milestone</span>
+            </div>
+            <div class="achievement-card">
+              <span class="ach-icon">💯</span>
+              <span class="ach-title">Rating 4.8+</span>
+              <span class="ach-desc">6 Bulan</span>
+            </div>
+            <div class="achievement-card">
+              <span class="ach-icon">📊</span>
+              <span class="ach-title">Rp 100jt+</span>
+              <span class="ach-desc">Total GMV</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Commodity Focus -->
+        <div class="section-block">
+          <h3 class="section-title">Komoditas Andalan</h3>
+          <div class="commodity-tags">
+            <span class="ctag">🌶️ Cabai Merah</span>
+            <span class="ctag">🧅 Bawang Merah</span>
+            <span class="ctag">🌾 Padi</span>
+            <span class="ctag">🌽 Jagung</span>
+            <span class="ctag">🥬 Sayuran Hijau</span>
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="section-block">
+          <div class="profile-actions">
+            <button class="profile-action-btn">
+              <i data-lucide="download"></i> Unduh Kartu Agen
+            </button>
+            <button class="profile-action-btn outline" id="btn-logout">
+              <i data-lucide="log-out"></i> Keluar
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================ -->
+    <!-- SCREEN 7: LAPORAN SEDERHANA                  -->
+    <!-- ============================================ -->
+    <section id="screen-report" class="screen">
+      <header class="detail-header report-header-bg">
+        <div class="detail-nav">
+          <button class="back-btn" data-screen="dashboard"><i data-lucide="arrow-left"></i></button>
+          <h2 class="detail-title">Laporan</h2>
+          <button class="icon-btn" aria-label="Unduh Laporan"><i data-lucide="download"></i></button>
+        </div>
+        <div class="report-hero">
+          <h1 class="report-period">Laporan April 2026</h1>
+          <p class="report-subtitle">Ringkasan kinerja periode 1-11 April</p>
+        </div>
+      </header>
+
+      <div class="screen-body detail-body">
+        <!-- KPI Cards -->
+        <div class="section-block">
+          <h3 class="section-title">Indikator Kinerja</h3>
+          <div class="kpi-grid">
+            <div class="kpi-card">
+              <div class="kpi-header">
+                <i data-lucide="trending-up" class="kpi-icon green"></i>
+                <span class="kpi-change positive">+18%</span>
+              </div>
+              <span class="kpi-value">Rp 12.4jt</span>
+              <span class="kpi-label">Pendapatan</span>
+              <div class="kpi-bar"><div class="kpi-bar-fill" style="width:78%;background:#10b981"></div></div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-header">
+                <i data-lucide="users" class="kpi-icon blue"></i>
+                <span class="kpi-change positive">+8%</span>
+              </div>
+              <span class="kpi-value">156</span>
+              <span class="kpi-label">Petani Aktif</span>
+              <div class="kpi-bar"><div class="kpi-bar-fill" style="width:85%;background:#3b82f6"></div></div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-header">
+                <i data-lucide="package" class="kpi-icon amber"></i>
+                <span class="kpi-change positive">+12%</span>
+              </div>
+              <span class="kpi-value">4.2 ton</span>
+              <span class="kpi-label">Volume Transaksi</span>
+              <div class="kpi-bar"><div class="kpi-bar-fill" style="width:65%;background:#f59e0b"></div></div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-header">
+                <i data-lucide="star" class="kpi-icon purple"></i>
+                <span class="kpi-change neutral">0%</span>
+              </div>
+              <span class="kpi-value">4.8/5</span>
+              <span class="kpi-label">Rating Layanan</span>
+              <div class="kpi-bar"><div class="kpi-bar-fill" style="width:96%;background:#8b5cf6"></div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Monthly Chart -->
+        <div class="section-block">
+          <h3 class="section-title">Pendapatan vs Pengeluaran</h3>
+          <div class="bar-chart-card">
+            <div class="bar-chart">
+              <div class="bar-group">
+                <div class="bar-wrapper">
+                  <div class="bar income" style="height:60%"></div>
+                  <div class="bar expense" style="height:35%"></div>
+                </div>
+                <span class="bar-label">Jan</span>
+              </div>
+              <div class="bar-group">
+                <div class="bar-wrapper">
+                  <div class="bar income" style="height:55%"></div>
+                  <div class="bar expense" style="height:30%"></div>
+                </div>
+                <span class="bar-label">Feb</span>
+              </div>
+              <div class="bar-group">
+                <div class="bar-wrapper">
+                  <div class="bar income" style="height:70%"></div>
+                  <div class="bar expense" style="height:40%"></div>
+                </div>
+                <span class="bar-label">Mar</span>
+              </div>
+              <div class="bar-group active-bar">
+                <div class="bar-wrapper">
+                  <div class="bar income" style="height:85%"></div>
+                  <div class="bar expense" style="height:38%"></div>
+                </div>
+                <span class="bar-label">Apr</span>
+              </div>
+            </div>
+            <div class="bar-legend">
+              <span><span class="legend-dot" style="background:#10b981"></span> Pemasukan</span>
+              <span><span class="legend-dot" style="background:#ef4444"></span> Pengeluaran</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Top Commodities -->
+        <div class="section-block">
+          <h3 class="section-title">Komoditas Terlaris</h3>
+          <div class="rank-list">
+            <div class="rank-item">
+              <span class="rank-num">1</span>
+              <span class="rank-emoji">🌶️</span>
+              <div class="rank-info">
+                <span class="rank-name">Cabai Merah Besar</span>
+                <div class="rank-bar"><div class="rank-fill" style="width:92%;background:#ef4444"></div></div>
+              </div>
+              <span class="rank-value">1.8 ton</span>
+            </div>
+            <div class="rank-item">
+              <span class="rank-num">2</span>
+              <span class="rank-emoji">🧅</span>
+              <div class="rank-info">
+                <span class="rank-name">Bawang Merah</span>
+                <div class="rank-bar"><div class="rank-fill" style="width:75%;background:#f59e0b"></div></div>
+              </div>
+              <span class="rank-value">1.2 ton</span>
+            </div>
+            <div class="rank-item">
+              <span class="rank-num">3</span>
+              <span class="rank-emoji">🌾</span>
+              <div class="rank-info">
+                <span class="rank-name">Padi</span>
+                <div class="rank-bar"><div class="rank-fill" style="width:58%;background:#10b981"></div></div>
+              </div>
+              <span class="rank-value">0.8 ton</span>
+            </div>
+            <div class="rank-item">
+              <span class="rank-num">4</span>
+              <span class="rank-emoji">🌽</span>
+              <div class="rank-info">
+                <span class="rank-name">Jagung</span>
+                <div class="rank-bar"><div class="rank-fill" style="width:42%;background:#3b82f6"></div></div>
+              </div>
+              <span class="rank-value">0.4 ton</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Export -->
+        <div class="section-block">
+          <div class="export-card">
+            <div class="export-info">
+              <i data-lucide="file-text"></i>
+              <div>
+                <span class="export-title">Unduh Laporan Lengkap</span>
+                <span class="export-desc">Format PDF · Data hingga 11 April 2026</span>
+              </div>
+            </div>
+            <button class="btn-export"><i data-lucide="download"></i> Unduh</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================ -->
+    <!-- BOTTOM NAVIGATION                            -->
+    <!-- ============================================ -->
+    <nav id="bottom-nav" class="bottom-nav hidden">
+      <button class="nav-item active" data-screen="dashboard">
+        <i data-lucide="layout-dashboard"></i>
+        <span>Beranda</span>
+      </button>
+      <button class="nav-item" data-screen="commodity">
+        <i data-lucide="leaf"></i>
+        <span>Komoditas</span>
+      </button>
+      <button class="nav-item" data-screen="finance">
+        <i data-lucide="wallet"></i>
+        <span>Keuangan</span>
+      </button>
+      <button class="nav-item" data-screen="report">
+        <i data-lucide="bar-chart-3"></i>
+        <span>Laporan</span>
+      </button>
+      <button class="nav-item" data-screen="profile">
+        <i data-lucide="user-circle"></i>
+        <span>Profil</span>
+      </button>
+    </nav>
+
+  </div>
+
+  <script src="supabase-client.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
