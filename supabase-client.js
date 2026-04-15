@@ -2,6 +2,7 @@
  * AgriConnect — Supabase Client
  * Handles all backend communication: Auth, Database queries
  */
+(function() {
 
 // Supabase configuration
 const SUPABASE_URL = 'https://jbogcumoovgknshqwyij.supabase.co';
@@ -262,3 +263,4 @@ window.formatRupiah = formatRupiah;
 window.formatDateLabel = formatDateLabel;
 
 console.log('🔗 Supabase client initialized');
+})();
