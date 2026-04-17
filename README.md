@@ -1,6 +1,6 @@
-# AgriConnect 🌾
+# Nandoor 🌾
 
-AgriConnect adalah sistem informasi *Dashboard Agent* MVP (Minimum Viable Product) untuk membantu Agen Pertanian mengelola informasi pasar komoditas, data petani binaan, dan laporan keuangan mereka secara *real-time*.
+Nandoor adalah sistem informasi *Dashboard Agent* MVP (Minimum Viable Product) untuk membantu Agen Pertanian mengelola informasi pasar komoditas, data petani binaan, dan laporan keuangan mereka secara *real-time*.
 
 ## ✨ Fitur Utama
 - **Real-Time Authentication**: Integrasi daftar & masuk lancar menggunakan backend Supabase.
@@ -19,7 +19,7 @@ Aplikasi ini sudah terkoneksi langsung dengan database demo Supabase dan siap di
 
 Jika Anda ingin melihat data demo yang komprehensif, silakan masuk menggunakan akun demo berikut:
 
-> **Email**: `sari@agriconnect.id`  
+> **Email**: `sari@nandoor.id`  
 > **Kata Sandi**: `demo1234`
 
 (Akun demo di atas telah dilengkapi dengan saldo *wallet* simulasi Rp 8.750.000 dan ratusan data histori transaksi & panen!).

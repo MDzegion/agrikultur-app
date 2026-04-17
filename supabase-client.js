@@ -1,5 +1,5 @@
 /**
- * AgriConnect — Supabase Client
+ * Nandoor — Supabase Client
  * Handles all backend communication: Auth, Database queries
  */
 (function() {

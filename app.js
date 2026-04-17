@@ -1,5 +1,5 @@
 /**
- * AgriConnect — App Controller
+ * Nandoor — App Controller
  * Handles screen navigation, auth flow, and dynamic data rendering
  * Integrated with Supabase backend
  */
@@ -650,5 +650,5 @@ document.addEventListener('DOMContentLoaded', () => {
   // Start the app
   initApp();
 
-  console.log('🌱 AgriConnect initialized with Supabase backend');
+  console.log('🌱 Nandoor initialized with Supabase backend');
 });
